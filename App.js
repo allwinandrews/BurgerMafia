@@ -4,6 +4,7 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import SplashScreen from './src/screens/SplashScreen/index.js';
 import HomeScreen from './src/screens/HomeScreen/index.js';
+import MenuScreen from './src/screens/MenuScreen/index.js';
 
 const Stack = createStackNavigator();
 
@@ -24,8 +25,8 @@ export default function App() {
               : undefined,
           ...TransitionPresets.ModalPresentationIOS,
         })}>
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+        <Stack.Screen name="Menu" component={MenuScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
