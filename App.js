@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
@@ -9,6 +10,7 @@ import MenuScreen from './src/screens/MenuScreen/index.js';
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [isSignedIn, setIsSignedIn] = useState(false);
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -25,8 +27,21 @@ export default function App() {
               : undefined,
           ...TransitionPresets.ModalPresentationIOS,
         })}>
-        {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
-        <Stack.Screen name="Menu" component={MenuScreen} />
+        {isSignedIn ? (
+          <>
+            <Stack.Screen name="Menu" component={MenuScreen} />
+          </>
+        ) : (
+          <Stack.Screen name="Home">
+            {({navigation}) => (
+              <HomeScreen
+                isSignedIn={isSignedIn}
+                setIsSignedIn={setIsSignedIn}
+                navigation={navigation}
+              />
+            )}
+          </Stack.Screen>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

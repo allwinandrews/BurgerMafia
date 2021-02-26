@@ -6,7 +6,7 @@ export default function FoodList(props) {
   const {data, handleCount} = props;
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <List.Section style={{paddingLeft: 40, paddingRight: 37}}>
         {data.map((item) => (
           <List.Item
@@ -22,9 +22,12 @@ export default function FoodList(props) {
             right={() => (
               <TextInput
                 value={item.count.toString()}
-                style={{width: 60}}
+                style={{width: 60, backgroundColor: 'black'}}
+                theme={{colors: {text: 'white'}}}
                 keyboardType="numeric"
-                onChangeText={(count) => handleCount(item.title, parseInt(count))}
+                onChangeText={(count) =>
+                  handleCount(item.title, parseInt(count))
+                }
               />
             )}
           />
