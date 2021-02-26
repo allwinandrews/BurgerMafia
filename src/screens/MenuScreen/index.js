@@ -56,7 +56,10 @@ export default function MenuScreen() {
     Keyboard.dismiss();
     setVisible(true);
   };
-  const hideModal = () => setVisible(false);
+  const hideModal = () => {
+    Keyboard.dismiss();
+    setVisible(false);
+  };
 
   useEffect(() => {
     if (orders.length > 0) setOrderDisable(false);
@@ -81,6 +84,8 @@ export default function MenuScreen() {
           value={searchQuery}
           onChangeText={onChangeSearch}
           placeholder="Search"
+          placeholderTextColor="white"
+          theme={{colors: {text: 'white'}}}
           style={styles.input}
         />
         <IconButton
@@ -117,7 +122,7 @@ const styles = StyleSheet.create({
     height: 30,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'black',
+    backgroundColor: 'black',
     marginBottom: 10,
     paddingRight: 10,
   },

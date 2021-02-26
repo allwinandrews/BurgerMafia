@@ -4,7 +4,8 @@ import {TextInput} from 'react-native-paper';
 
 import SplashScreen from '../SplashScreen';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen(props) {
+  const {navigation, isSignedIn, setIsSignedIn} = props;
   const [state, setState] = useState({
     username: '',
     password: '',
@@ -12,7 +13,7 @@ export default function HomeScreen({navigation}) {
   const [splash, setSplash] = useState(true);
 
   const handleLogin = () => {
-    navigation.navigate('Menu');
+    setIsSignedIn(true);
   };
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export default function HomeScreen({navigation}) {
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (isSignedIn) navigation.navigate('Menu');
+  }, [isSignedIn]);
 
   return splash ? (
     <SplashScreen />
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
   button: {width: 300},
   input: {
     width: 300,
-    height: 30,
+    height: 50,
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',
