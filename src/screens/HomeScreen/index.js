@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {Button, View, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-paper';
 
+import auth from '@react-native-firebase/auth';
+
 import SplashScreen from '../SplashScreen';
 
 export default function HomeScreen(props) {
@@ -13,7 +15,23 @@ export default function HomeScreen(props) {
   const [splash, setSplash] = useState(true);
 
   const handleLogin = () => {
-    setIsSignedIn(true);
+    auth()
+      .signInWithEmailAndPassword(state.username, state.password)
+      .then(() => {
+        console.log('User account created & signed in!');
+        setIsSignedIn(true);
+      })
+      .catch((error) => {
+        // if (error.code === 'auth/email-already-in-use') {
+        //   console.log('That email address is already in use!');
+        // }
+
+        // if (error.code === 'auth/invalid-email') {
+        //   console.log('That email address is invalid!');
+        // }
+
+        console.error(error);
+      });
   };
 
   useEffect(() => {

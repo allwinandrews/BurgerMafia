@@ -27,7 +27,6 @@ export default function OrderModal(props) {
 
   const handleConfirm = () => {
     const data = {tableNo: parseInt(table), orders};
-    console.log(data);
   };
 
   useEffect(() => {
