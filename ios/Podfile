@@ -12,6 +12,8 @@ target 'BurgerMafia' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
   target 'BurgerMafiaTests' do
     inherit! :complete
     # Pods for testing
