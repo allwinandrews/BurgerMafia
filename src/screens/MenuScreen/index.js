@@ -2,28 +2,32 @@ import React, {useState, useEffect} from 'react';
 import {Alert, Keyboard, View, StyleSheet} from 'react-native';
 import {TextInput, IconButton} from 'react-native-paper';
 
+import firestore from '@react-native-firebase/firestore';
+
 import FoodList from './FoodList';
 import OrderModal from './OrderModal';
+import LoadingScreen from '../../components/LoadingScreen';
 
-export default function MenuScreen() {
+export default function MenuScreen({navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
   const menu = [
-    {title: 'Corleone', price: 200, count: 0},
-    {title: 'Corleone[cheese]', price: 220, count: 0},
-    {title: 'Corleone DP', price: 300, count: 0},
-    {title: 'Corleone DP[cheese]', price: 320, count: 0},
     {title: 'Al Capone', price: 160, count: 0},
-    {title: 'Al Capone[cheese]', price: 180, count: 0},
     {title: 'Al Capone DP', price: 250, count: 0},
     {title: 'Al Capone DP[cheese]', price: 270, count: 0},
-    {title: 'Yakuza TFB[CHKN]', price: 330, count: 0},
-    {title: 'Yakuza TFB[BEEF]', price: 400, count: 0},
+    {title: 'Al Capone[cheese]', price: 180, count: 0},
     {title: 'Clemenza', price: 140, count: 0},
+    {title: 'Corleone', price: 200, count: 0},
+    {title: 'Corleone DP', price: 300, count: 0},
+    {title: 'Corleone DP[cheese]', price: 320, count: 0},
+    {title: 'Corleone[cheese]', price: 220, count: 0},
+    {title: 'Yakuza TFB[BEEF]', price: 400, count: 0},
+    {title: 'Yakuza TFB[CHKN]', price: 330, count: 0},
   ];
   const [data, setData] = useState(menu);
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const [orders, setOrders] = useState([]);
   const [orderDisable, setOrderDisable] = useState(true);
+  const [loader, setLoader] = useState(true);
 
   const onChangeSearch = (query) => {
     if (!query || query === ' ' || query === '') setData(menu);
@@ -69,7 +73,33 @@ export default function MenuScreen() {
     // };
   }, [orders]);
 
-  return (
+  const convertToList = (mainObj) => {
+    const foodData = Object.keys(mainObj).map((key) => {
+      return {title: key, price: mainObj[key], count: 0};
+    });
+    setData(foodData);
+  };
+
+  const getFoods = () => {
+    setLoader(true);
+    const foodCollection = firestore()
+      .collection('foods')
+      .doc('DXgSqJAbhVr7bF9pqAJm')
+      .onSnapshot((documentSnapshot) => {
+        convertToList(documentSnapshot.data());
+        setLoader(false);
+      });
+    // Stop listening for updates when no longer required
+    return () => foodCollection();
+  };
+
+  useEffect(() => {
+    getFoods();
+  }, []);
+
+  return loader === true ? (
+    <LoadingScreen />
+  ) : (
     <View style={styles.container}>
       <View
         style={{
