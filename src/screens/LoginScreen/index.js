@@ -6,19 +6,20 @@ import auth from '@react-native-firebase/auth';
 
 import SplashScreen from '../SplashScreen';
 
-export default function HomeScreen(props) {
-  const {navigation, isSignedIn, setIsSignedIn} = props;
+export default function LoginScreen(props) {
+  const {navigation, isSignedIn, setIsSignedIn, setUserEmail} = props;
   const [state, setState] = useState({
-    username: '',
+    email: '',
     password: '',
   });
   const [splash, setSplash] = useState(true);
 
   const handleLogin = () => {
     auth()
-      .signInWithEmailAndPassword(state.username, state.password)
+      .signInWithEmailAndPassword(state.email, state.password)
       .then(() => {
         console.log('User account created & signed in!');
+        setUserEmail(state.email);
         setIsSignedIn(true);
       })
       .catch((error) => {
@@ -48,7 +49,10 @@ export default function HomeScreen(props) {
   }, []);
 
   useEffect(() => {
-    if (isSignedIn) navigation.navigate('Menu');
+    if (isSignedIn)
+      navigation.navigate('Decision', {
+        email: state.email,
+      });
   }, [isSignedIn]);
 
   return splash ? (
@@ -56,8 +60,8 @@ export default function HomeScreen(props) {
   ) : (
     <View style={styles.container}>
       <TextInput
-        value={state.username}
-        onChangeText={(username) => setState({...state, username})}
+        value={state.email}
+        onChangeText={(email) => setState({...state, email})}
         label="Email"
         style={styles.input}
       />
